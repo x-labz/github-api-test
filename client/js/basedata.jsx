@@ -15,7 +15,7 @@ var BaseData = React.createClass({
                     <p>{data.bio}</p>
                     <p>Public repositories: {data.public_repos}</p>
                 </article>) : null
-                }
+                }   
             </section>
         )
     }
