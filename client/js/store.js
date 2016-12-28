@@ -17,7 +17,9 @@ var store = {
     initialState: {
         baseData: {
             request: 'idle'
-        }
+        },
+        currentPage: 1,
+        repos: {}
     },
     setValue: function (ref, value) {
         _.set(this.state, ref, value);
@@ -35,20 +37,54 @@ var store = {
                 if (response.status >= 200 && response.status < 300) {
                     return Promise.resolve(response)
                 } else {
-                    return Promise.reject(new Error(response.statusText))
+                    return Promise.reject(response.statusText)
                 }
-
             }).then(response => {
                 return response.json();
             }).then(responseData => {
                 this.setValue('baseData.request', 'done');
-                this.setValue('baseData.fields',responseData);
+                this.setValue('baseData.fields', responseData);
                 console.log(responseData);
             })
-            .catch(err => {
-                this.setValue('baseData.request', 'error');
-                console.error(err);
-            })
+                .catch(err => {
+                    this.setValue('baseData.request', 'error');
+
+                    this.setValue('baseData.error', err.message);
+
+                    console.error(err);
+                })
+        },
+        loadPage: function (page) {
+            this.setValue('currentPage', page);
+
+            if (!this.state.repos[page] || (this.state.repos[page] && this.state.repos[page].request == 'error')) {
+                this.setValue('repos[' + page + ']', {
+                    request: 'fetch',
+                    data: []
+                });
+                fetch('https://api.github.com/users/addyosmani/repos?page=' + page + '&per_page=15', {
+                    headers: new Headers({})
+                }).then(response => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return Promise.resolve(response)
+                    } else {
+                        return Promise.reject(response.statusText)
+                    }
+                }).then(response => {
+                    return response.json();
+                }).then(responseData => {
+                    this.setValue('repos[' + page + '].request', 'done');
+                    this.setValue('repos[' + page + '].data', responseData);
+                    console.log(this.state);
+                })
+                    .catch((err) => {
+                        this.setValue('repos[' + page + '].request', 'error');
+
+                        this.setValue('repos[' + page + '].error', err.message);
+
+                        console.error(err);
+                    })
+            }
         }
         // counter: {
         //     up: function () {

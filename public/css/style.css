@@ -1,5 +1,21 @@
-﻿body {
-    
+﻿main {
+        min-height: 500px;
+}
+
+.pager {
+    min-height: 50px;
+}
+
+.pager label {
+    margin: 25px 140px;
+}
+
+.item-list {
+    min-height: 300px;
+}
+
+button:disabled {
+        opacity: .5;
 }
 
 ul,p {
@@ -22,10 +38,9 @@ footer p {
     padding-top: 15px;
 }
 
-.row {
-    
+.inline {
+    display: inline-block;
 }
-
 
 /*MiSC*/
 

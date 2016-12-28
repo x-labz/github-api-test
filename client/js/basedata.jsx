@@ -6,17 +6,18 @@ var BaseData = React.createClass({
     },
     render: function () {
         var data = this.props.data.fields ;
+        var msg = (this.props.data.request == 'fetch' ? 'Loading data...' : 'Network error.'  ) ;
         return (
             <section>
-                {this.props.data.request}
-                { data ? 
+            <h3>Basedata: </h3>
+                { !!data ? 
                 (<article>
-                    <p>{data.name}</p>
+                    <p><b>{data.name}</b></p>
                     <p>{data.bio}</p>
                     <p>Public repositories: {data.public_repos}</p>
-                </article>) : null
+                </article>) : (<div>{msg}</div>)
                 }   
-            </section>
+            </section>   
         )
     }
 });

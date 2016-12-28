@@ -47,6 +47,7 @@
 	__webpack_require__(1);
 	__webpack_require__(33);
 	__webpack_require__(183);
+	__webpack_require__(185);
 	__webpack_require__(184);
 	module.exports = __webpack_require__(180);
 
@@ -76,17 +77,26 @@
 	    },
 	    render: function render() {
 	        var data = this.props.data.fields;
+	        var msg = this.props.data.request == 'fetch' ? 'Loading data...' : 'Network error.';
 	        return _react2.default.createElement(
 	            'section',
 	            null,
-	            this.props.data.request,
-	            data ? _react2.default.createElement(
+	            _react2.default.createElement(
+	                'h3',
+	                null,
+	                'Basedata: '
+	            ),
+	            !!data ? _react2.default.createElement(
 	                'article',
 	                null,
 	                _react2.default.createElement(
 	                    'p',
 	                    null,
-	                    data.name
+	                    _react2.default.createElement(
+	                        'b',
+	                        null,
+	                        data.name
+	                    )
 	                ),
 	                _react2.default.createElement(
 	                    'p',
@@ -99,7 +109,11 @@
 	                    'Public repositories: ',
 	                    data.public_repos
 	                )
-	            ) : null
+	            ) : _react2.default.createElement(
+	                'div',
+	                null,
+	                msg
+	            )
 	        );
 	    }
 	});
@@ -4188,6 +4202,7 @@
 	});
 	
 	_store.store.actions.getBaseData.call(_store.store);
+	_store.store.actions.loadPage.call(_store.store, _store.store.state.currentPage);
 
 /***/ },
 /* 34 */
@@ -21579,7 +21594,9 @@
 	    initialState: {
 	        baseData: {
 	            request: 'idle'
-	        }
+	        },
+	        currentPage: 1,
+	        repos: {}
 	    },
 	    setValue: function setValue(ref, value) {
 	        _.set(this.state, ref, value);
@@ -21599,7 +21616,7 @@
 	                if (response.status >= 200 && response.status < 300) {
 	                    return Promise.resolve(response);
 	                } else {
-	                    return Promise.reject(new Error(response.statusText));
+	                    return Promise.reject(response.statusText);
 	                }
 	            }).then(function (response) {
 	                return response.json();
@@ -21609,8 +21626,44 @@
 	                console.log(responseData);
 	            }).catch(function (err) {
 	                _this.setValue('baseData.request', 'error');
+	
+	                _this.setValue('baseData.error', err.message);
+	
 	                console.error(err);
 	            });
+	        },
+	        loadPage: function loadPage(page) {
+	            var _this2 = this;
+	
+	            this.setValue('currentPage', page);
+	
+	            if (!this.state.repos[page] || this.state.repos[page] && this.state.repos[page].request == 'error') {
+	                this.setValue('repos[' + page + ']', {
+	                    request: 'fetch',
+	                    data: []
+	                });
+	                fetch('https://api.github.com/users/addyosmani/repos?page=' + page + '&per_page=15', {
+	                    headers: new Headers({})
+	                }).then(function (response) {
+	                    if (response.status >= 200 && response.status < 300) {
+	                        return Promise.resolve(response);
+	                    } else {
+	                        return Promise.reject(response.statusText);
+	                    }
+	                }).then(function (response) {
+	                    return response.json();
+	                }).then(function (responseData) {
+	                    _this2.setValue('repos[' + page + '].request', 'done');
+	                    _this2.setValue('repos[' + page + '].data', responseData);
+	                    console.log(_this2.state);
+	                }).catch(function (err) {
+	                    _this2.setValue('repos[' + page + '].request', 'error');
+	
+	                    _this2.setValue('repos[' + page + '].error', err.message);
+	
+	                    console.error(err);
+	                });
+	            }
 	        }
 	        // counter: {
 	        //     up: function () {
@@ -38767,6 +38820,8 @@
 	
 	var _basedata = __webpack_require__(1);
 	
+	var _list = __webpack_require__(185);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var Header = _react2.default.createClass({
@@ -38790,6 +38845,7 @@
 	            )
 	        );
 	    }
+	
 	});
 	
 	var MainPage = _react2.default.createClass({
@@ -38802,17 +38858,170 @@
 	        return true;
 	    },
 	    render: function render() {
+	        var repo = this.props.data.repos[this.props.data.currentPage];
 	        return _react2.default.createElement(
 	            'div',
 	            null,
 	            _react2.default.createElement(Header, null),
 	            _react2.default.createElement(_basedata.BaseData, { data: this.props.data.baseData }),
-	            _react2.default.createElement('section', { className: 'item-list' })
+	            _react2.default.createElement(
+	                'section',
+	                null,
+	                _react2.default.createElement(
+	                    'h3',
+	                    null,
+	                    'Repositories: '
+	                ),
+	                _react2.default.createElement(_list.Pager, { data: this.props.data }),
+	                _react2.default.createElement(_list.ListWrapper, { data: repo }),
+	                _react2.default.createElement(_list.Pager, { data: this.props.data })
+	            )
 	        );
 	    }
 	});
 	
 	exports.MainPage = MainPage;
+
+/***/ },
+/* 185 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Pager = exports.ListWrapper = undefined;
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _store = __webpack_require__(180);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var ListWrapper = _react2.default.createClass({
+	    displayName: 'ListWrapper',
+	
+	    shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
+	        return true;
+	    },
+	    render: function render() {
+	        var content = null;
+	        if (this.props.data) {
+	            if (this.props.data.request == 'done') {
+	                content = _react2.default.createElement(List, { data: this.props.data });
+	            } else {
+	                content = _react2.default.createElement('div', {}, this.props.data.request == 'fetch' ? 'Loading data...' : 'Network error. (' + this.props.data.error + ')');
+	            }
+	        }
+	        return _react2.default.createElement(
+	            'section',
+	            { className: 'item-list' },
+	            content
+	        );
+	    }
+	});
+	
+	var List = _react2.default.createClass({
+	    displayName: 'List',
+	
+	    shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
+	        return true;
+	    },
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'div',
+	            null,
+	            this.props.data.data.map(function (item, idx) {
+	                return _react2.default.createElement(
+	                    'article',
+	                    { key: idx },
+	                    _react2.default.createElement(
+	                        'a',
+	                        { href: item.html_url, target: '_blank' },
+	                        ' ',
+	                        item.name,
+	                        ' '
+	                    ),
+	                    ' ( ',
+	                    new Date(item.updated_at).toLocaleDateString(),
+	                    ' )'
+	                );
+	            })
+	        );
+	    }
+	});
+	
+	var ListItem = _react2.default.createClass({
+	    displayName: 'ListItem',
+	
+	    shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
+	        return true;
+	    },
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'article',
+	            null,
+	            this.props.data
+	        );
+	    }
+	});
+	
+	var Pager = _react2.default.createClass({
+	    displayName: 'Pager',
+	
+	    shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
+	        return true;
+	    },
+	    change: function change(dir) {
+	        _store.store.actions.loadPage.call(_store.store, _store.store.state.currentPage + dir);
+	    },
+	    render: function render() {
+	        var _this = this;
+	
+	        var data = {
+	            currentPage: this.props.data.currentPage,
+	            pages: this.props.data.baseData.fields && Math.ceil(this.props.data.baseData.fields.public_repos / 15),
+	            disableRev: this.props.data.currentPage == 1
+	        };
+	        data.disableFF = data.currentPage == data.pages;
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'pager' },
+	            data.pages ? _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'button',
+	                    { disabled: data.disableRev, className: 'inline', 'data-role': 'rev', onClick: function onClick() {
+	                            _this.change(-1);
+	                        } },
+	                    '<'
+	                ),
+	                _react2.default.createElement(
+	                    'label',
+	                    { className: 'inline' },
+	                    'page ',
+	                    data.currentPage,
+	                    ' of ',
+	                    data.pages
+	                ),
+	                _react2.default.createElement(
+	                    'button',
+	                    { disabled: data.disableFF, className: 'inline', 'data-role': 'ff', onClick: function onClick() {
+	                            _this.change(1);
+	                        } },
+	                    '>'
+	                )
+	            ) : null
+	        );
+	    }
+	});
+	
+	exports.ListWrapper = ListWrapper;
+	exports.Pager = Pager;
 
 /***/ }
 /******/ ]);

@@ -24,13 +24,13 @@ gulp.task('lib', function () {
 });
 
 gulp.task('react', function () {
-	var compileBabel = babel({
-		"presets": ["es2015", "react"]
-	});
-	compileBabel.on('error', function (err) {
-		console.info(err);
-		gulp.start('watch');
-	});
+	// var compileBabel = babel({
+	// 	"presets": ["es2015", "react"]
+	// });
+	// compileBabel.on('error', function (err) {
+	// 	console.info(err);
+	// 	gulp.start('watch');
+	// });
 
 	return gulp.src('client/js/*.js*')
 		.pipe(plumber())
