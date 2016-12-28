@@ -16,3 +16,4 @@ store.bind({
 
 store.actions.getBaseData.call(store); 
 store.actions.loadPage.call(store,store.state.currentPage) ;  
+

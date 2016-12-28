@@ -45,7 +45,7 @@ var store = {
                 this.setValue('baseData.request', 'done');
                 this.setValue('baseData.fields', responseData);
                 console.log(responseData);
-            })
+            }) 
                 .catch(err => {
                     this.setValue('baseData.request', 'error');
 

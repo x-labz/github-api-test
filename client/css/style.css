@@ -12,7 +12,7 @@
 
 .item-list {
     min-height: 300px;
-}
+} 
 
 button:disabled {
         opacity: .5;
