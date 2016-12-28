@@ -1,0 +1,52 @@
+﻿body {
+    
+}
+
+ul,p {
+    margin:0;
+}
+
+label {
+    font-weight: normal;
+}
+
+h1.title {
+    margin-top: 20px;
+}
+
+footer p {
+    display: block;
+    text-align: center;
+    margin: 35px;
+    border-top: solid 1px #eee;
+    padding-top: 15px;
+}
+
+.row {
+    
+}
+
+
+/*MiSC*/
+
+
+.floatleft {
+    float: left;
+}
+
+.floatright {
+    float: right;
+}
+
+.clearfix:after, .row:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
+
+.hide {
+    display: none;
+}
