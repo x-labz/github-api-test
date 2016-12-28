@@ -46,9 +46,9 @@
 
 	__webpack_require__(1);
 	__webpack_require__(33);
-	__webpack_require__(183);
 	__webpack_require__(185);
 	__webpack_require__(184);
+	__webpack_require__(183);
 	module.exports = __webpack_require__(180);
 
 
@@ -4188,7 +4188,7 @@
 	
 	var _store = __webpack_require__(180);
 	
-	var _mainpage = __webpack_require__(184);
+	var _mainpage = __webpack_require__(183);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -21576,9 +21576,11 @@
 	});
 	exports.store = undefined;
 	
-	__webpack_require__(181);
+	var _lodash = __webpack_require__(181);
 	
-	var _helpers = __webpack_require__(183);
+	var _lodash2 = _interopRequireDefault(_lodash);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var store = {
 	    initialize: function initialize() {
@@ -21590,7 +21592,7 @@
 	    getInitialState: function getInitialState() {
 	        return this.initialState;
 	    },
-	    state: { modalRef: {} },
+	    state: {},
 	    initialState: {
 	        baseData: {
 	            request: 'idle'
@@ -21599,12 +21601,12 @@
 	        repos: {}
 	    },
 	    setValue: function setValue(ref, value) {
-	        _.set(this.state, ref, value);
-	        store.renderRef.forceUpdate.call(store.renderRef);
+	        _lodash2.default.set(this.state, ref, value);
+	        store.renderRef && store.renderRef.forceUpdate.call(store.renderRef);
 	    },
 	
 	    actions: {
-	        getBaseData: function getBaseData() {
+	        getBaseData: function getBaseData(callback) {
 	            var _this = this;
 	
 	            this.setValue('baseData.request', 'fetch');
@@ -21624,12 +21626,14 @@
 	                _this.setValue('baseData.request', 'done');
 	                _this.setValue('baseData.fields', responseData);
 	                console.log(responseData);
+	                callback();
 	            }).catch(function (err) {
 	                _this.setValue('baseData.request', 'error');
 	
 	                _this.setValue('baseData.error', err.message);
 	
 	                console.error(err);
+	                callback();
 	            });
 	        },
 	        loadPage: function loadPage(page) {
@@ -21665,17 +21669,6 @@
 	                });
 	            }
 	        }
-	        // counter: {
-	        //     up: function () {
-	        //         this.setValue('counter.cnt', this.state.counter.cnt + 1);
-	        //     },
-	        //     down: function () {
-	        //         console.info(this);
-	        //         this.state.counter.cnt--;
-	        //     }
-	        // }
-	
-	
 	    }
 	};
 	
@@ -38790,21 +38783,6 @@
 
 /***/ },
 /* 183 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	var toTime = function toTime(val) {
-		return parseInt(val / 60) + ':' + (parseInt(val % 60) >= 10 ? parseInt(val % 60) : '0' + parseInt(val % 60));
-	};
-	
-	exports.toTime = toTime;
-
-/***/ },
-/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38820,7 +38798,7 @@
 	
 	var _basedata = __webpack_require__(1);
 	
-	var _list = __webpack_require__(185);
+	var _list = __webpack_require__(184);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -38883,7 +38861,7 @@
 	exports.MainPage = MainPage;
 
 /***/ },
-/* 185 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39022,6 +39000,21 @@
 	
 	exports.ListWrapper = ListWrapper;
 	exports.Pager = Pager;
+
+/***/ },
+/* 185 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var toTime = function toTime(val) {
+		return parseInt(val / 60) + ':' + (parseInt(val % 60) >= 10 ? parseInt(val % 60) : '0' + parseInt(val % 60));
+	};
+	
+	exports.toTime = toTime;
 
 /***/ }
 /******/ ]);

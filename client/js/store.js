@@ -1,7 +1,4 @@
-'use strict'
-
-import 'lodash';
-import { toTime } from './helpers.js';
+import _ from 'lodash' ;
 
 var store = {
     initialize: function () {
@@ -9,11 +6,11 @@ var store = {
     },
     bind: function (arg) {
         this.renderRef = arg.mainpage;
-    },
+    }, 
     getInitialState: function () {
         return this.initialState;
     },
-    state: { modalRef: {} },
+    state: { },
     initialState: {
         baseData: {
             request: 'idle'
@@ -23,11 +20,11 @@ var store = {
     },
     setValue: function (ref, value) {
         _.set(this.state, ref, value);
-        store.renderRef.forceUpdate.call(store.renderRef);
+        store.renderRef && store.renderRef.forceUpdate.call(store.renderRef);
     },
 
     actions: {
-        getBaseData: function () {
+        getBaseData: function (callback) {
             this.setValue('baseData.request', 'fetch');
 
             fetch('https://api.github.com/users/addyosmani', {
@@ -45,6 +42,7 @@ var store = {
                 this.setValue('baseData.request', 'done');
                 this.setValue('baseData.fields', responseData);
                 console.log(responseData);
+                callback();
             }) 
                 .catch(err => {
                     this.setValue('baseData.request', 'error');
@@ -52,6 +50,7 @@ var store = {
                     this.setValue('baseData.error', err.message);
 
                     console.error(err);
+                    callback();
                 })
         },
         loadPage: function (page) {
@@ -86,18 +85,6 @@ var store = {
                     })
             }
         }
-        // counter: {
-        //     up: function () {
-        //         this.setValue('counter.cnt', this.state.counter.cnt + 1);
-        //     },
-        //     down: function () {
-        //         console.info(this);
-        //         this.state.counter.cnt--;
-        //     }
-        // }
-
-
-
     }
 }
 

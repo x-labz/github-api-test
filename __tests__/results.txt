@@ -1,0 +1,10 @@
+ PASS  __tests__\test1.js  
+ 
+  √ store init
+  √ store set value
+
+Test Suites: 1 passed, 1 total
+Tests:       2 passed, 2 total
+Snapshots:   0 total
+Time:        2.66s
+Ran all test suites.
