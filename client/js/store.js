@@ -22,7 +22,6 @@ var store = {
         _.set(this.state, ref, value);
         store.renderRef && store.renderRef.forceUpdate.call(store.renderRef);
     },
-
     actions: {
         getBaseData: function (callback) {
             this.setValue('baseData.request', 'fetch');

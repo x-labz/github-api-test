@@ -21609,7 +21609,6 @@
 	        _lodash2.default.set(this.state, ref, value);
 	        store.renderRef && store.renderRef.forceUpdate.call(store.renderRef);
 	    },
-	
 	    actions: {
 	        getBaseData: function getBaseData(callback) {
 	            var _this = this;
@@ -38872,7 +38871,7 @@
 	                    _react2.default.createElement(
 	                        'h3',
 	                        null,
-	                        'Tests results'
+	                        'Test results'
 	                    ),
 	                    _react2.default.createElement(
 	                        'p',

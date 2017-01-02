@@ -46,7 +46,7 @@ var MainPage = React.createClass({
                         </section>
                     </div>
                     <div className="three columns">
-                        <h3>Tests results</h3> 
+                        <h3>Test results</h3>  
                         <p>Tape: <a href="test-results/_tape_test/results.txt" target="_blank">result</a> </p>
                         <p>Nightwatch: <a href="test-results/_nightwatch/results/report.html" target="_blank">result</a> </p>
                         <p>Jest: <a href="test-results/__tests__/results.txt" target="_blank">result</a> </p>
