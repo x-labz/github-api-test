@@ -13,7 +13,8 @@ var Header = React.createClass({
                     <h1 className='title'>
                         github api test
                     </h1>
-                </div>  
+
+                </div>
             </header>
         )
     }
@@ -32,16 +33,26 @@ var MainPage = React.createClass({
     render: function () {
         var repo = this.props.data.repos[this.props.data.currentPage];
         return (
-            <div>
+            <section>
                 <Header></Header>
-                <BaseData data={this.props.data.baseData}></BaseData>
-                <section>
-                    <h3>Repositories: </h3>
-                    <Pager data={this.props.data}></Pager>
-                    <ListWrapper  data={repo}></ListWrapper>
-                    <Pager data={this.props.data}></Pager>
-                </section>
-            </div>
+                <div className="row">
+                    <div className="nine columns">
+                        <BaseData data={this.props.data.baseData}></BaseData>
+                        <section>
+                            <h3>Repositories: </h3>
+                            <Pager data={this.props.data}></Pager>
+                            <ListWrapper data={repo}></ListWrapper>
+                            <Pager data={this.props.data}></Pager>
+                        </section>
+                    </div>
+                    <div className="three columns">
+                        <h3>Tests results</h3> 
+                        <p>Tape: <a href="../_tape_test/results.txt" target="_blank">result</a> </p>
+                        <p>Nightwatch: <a href="../_nightwatch/results/report.html" target="_blank">result</a> </p>
+                        <p>Jest: <a href="../__tests__/results.txt" target="_blank">result</a> </p>
+                    </div>
+                </div>
+            </section>
         )
     }
 });

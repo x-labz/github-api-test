@@ -12,7 +12,7 @@ var ListWrapper = React.createClass({
                 content = React.createElement(List, { data: this.props.data });
             }
             else {
-                content = React.createElement('div', {}, this.props.data.request == 'fetch' ? 'Loading data...' : 'Network error. ('+ this.props.data.error +')');
+                content = React.createElement('div', { className: 'ajax' }, this.props.data.request == 'fetch' ? 'Loading data...' : 'Network error. '+ this.props.data.error );
             }
         }
         return (

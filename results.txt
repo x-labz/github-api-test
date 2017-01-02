@@ -1,0 +1,82 @@
+
+  A passing test
+
+    √ This test will pass.
+
+  Assertions with tape.
+
+
+    × Given two mismatched values, .equal() should produce a nice bug report
+    -------------------------------------------------------------------------
+      operator: equal
+      expected: 'something to test'
+      actual:   'sonething to test'
+      at: Test.<anonymous> (C:/_WORK/git-test/_tape_test/test-1.js:14:10)
+
+
+
+
+  Failed Tests: There was 1 failure
+
+    Assertions with tape.
+
+      × Given two mismatched values, .equal() should produce a nice bug report
+
+
+  total:     2
+  passing:   1
+  failing:   1
+  duration:  1.5s
+
+
+
+  store init
+
+
+
+
+  store init
+
+    √ should be equal
+
+    × test exited without ending
+    -----------------------------
+      operator: fail
+
+
+    × test exited without ending
+    -----------------------------
+      operator: fail
+
+
+
+
+  Failed Tests: There were 2 failures
+
+    store init
+
+      × test exited without ending
+      × test exited without ending
+
+
+  total:     3
+  passing:   1
+  failing:   2
+  duration:  1.6s
+
+
+
+  store init
+
+    √ should be equal
+
+  store set value
+
+    √ should be equal
+
+
+  total:     2
+  passing:   2
+  duration:  1.5s
+
+

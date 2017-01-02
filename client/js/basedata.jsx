@@ -12,7 +12,7 @@ var BaseData = React.createClass({
             <h3>Basedata: </h3>
                 { !!data ? 
                 (<article>
-                    <p><b>{data.name}</b></p>
+                    <p><b data-test="basedata-username" >{data.name}</b></p>
                     <p>{data.bio}</p>
                     <p>Public repositories: {data.public_repos}</p>
                 </article>) : (<div>{msg}</div>)

@@ -34,26 +34,24 @@ var store = {
                 if (response.status >= 200 && response.status < 300) {
                     return Promise.resolve(response)
                 } else {
-                    return Promise.reject(response.statusText)
+                    return Promise.reject(response)
                 }
             }).then(response => {
                 return response.json();
             }).then(responseData => {
                 this.setValue('baseData.request', 'done');
                 this.setValue('baseData.fields', responseData);
-                console.log(responseData);
-                callback();
-            }) 
-                .catch(err => {
-                    this.setValue('baseData.request', 'error');
+                // console.log(responseData);
+                callback && callback();
+            }).catch(err => {
+                this.setValue('baseData.request', 'error');
 
-                    this.setValue('baseData.error', err.message);
+                this.setValue('baseData.error', err.status + '(' + err.statusText + ')' );
 
-                    console.error(err);
-                    callback();
-                })
+                console.error(err);
+            })
         },
-        loadPage: function (page) {
+        loadPage: function (page, callback) {
             this.setValue('currentPage', page);
 
             if (!this.state.repos[page] || (this.state.repos[page] && this.state.repos[page].request == 'error')) {
@@ -67,19 +65,20 @@ var store = {
                     if (response.status >= 200 && response.status < 300) {
                         return Promise.resolve(response)
                     } else {
-                        return Promise.reject(response.statusText)
+                        return Promise.reject(response)
                     }
                 }).then(response => {
                     return response.json();
                 }).then(responseData => {
                     this.setValue('repos[' + page + '].request', 'done');
                     this.setValue('repos[' + page + '].data', responseData);
-                    console.log(this.state);
+                    // console.log(this.state);
+                    callback && callback();
                 })
                     .catch((err) => {
                         this.setValue('repos[' + page + '].request', 'error');
 
-                        this.setValue('repos[' + page + '].error', err.message);
+                        this.setValue('repos[' + page + '].error', err.status + ' ( ' + err.statusText + ' )');
 
                         console.error(err);
                     })

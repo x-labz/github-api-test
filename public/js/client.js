@@ -94,7 +94,7 @@
 	                    null,
 	                    _react2.default.createElement(
 	                        'b',
-	                        null,
+	                        { 'data-test': 'basedata-username' },
 	                        data.name
 	                    )
 	                ),
@@ -4191,6 +4191,11 @@
 	var _mainpage = __webpack_require__(183);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var supported = !!window.fetch;
+	
+	document.getElementById('main').style.display = supported ? 'block' : 'none';
+	document.getElementById('not-supported').style.display = !supported ? 'block' : 'none';
 	
 	console.info("start");
 	
@@ -21618,25 +21623,24 @@
 	                if (response.status >= 200 && response.status < 300) {
 	                    return Promise.resolve(response);
 	                } else {
-	                    return Promise.reject(response.statusText);
+	                    return Promise.reject(response);
 	                }
 	            }).then(function (response) {
 	                return response.json();
 	            }).then(function (responseData) {
 	                _this.setValue('baseData.request', 'done');
 	                _this.setValue('baseData.fields', responseData);
-	                console.log(responseData);
-	                callback();
+	                // console.log(responseData);
+	                callback && callback();
 	            }).catch(function (err) {
 	                _this.setValue('baseData.request', 'error');
 	
-	                _this.setValue('baseData.error', err.message);
+	                _this.setValue('baseData.error', err.status + '(' + err.statusText + ')');
 	
 	                console.error(err);
-	                callback();
 	            });
 	        },
-	        loadPage: function loadPage(page) {
+	        loadPage: function loadPage(page, callback) {
 	            var _this2 = this;
 	
 	            this.setValue('currentPage', page);
@@ -21652,18 +21656,19 @@
 	                    if (response.status >= 200 && response.status < 300) {
 	                        return Promise.resolve(response);
 	                    } else {
-	                        return Promise.reject(response.statusText);
+	                        return Promise.reject(response);
 	                    }
 	                }).then(function (response) {
 	                    return response.json();
 	                }).then(function (responseData) {
 	                    _this2.setValue('repos[' + page + '].request', 'done');
 	                    _this2.setValue('repos[' + page + '].data', responseData);
-	                    console.log(_this2.state);
+	                    // console.log(this.state);
+	                    callback && callback();
 	                }).catch(function (err) {
 	                    _this2.setValue('repos[' + page + '].request', 'error');
 	
-	                    _this2.setValue('repos[' + page + '].error', err.message);
+	                    _this2.setValue('repos[' + page + '].error', err.status + ' ( ' + err.statusText + ' )');
 	
 	                    console.error(err);
 	                });
@@ -38838,21 +38843,71 @@
 	    render: function render() {
 	        var repo = this.props.data.repos[this.props.data.currentPage];
 	        return _react2.default.createElement(
-	            'div',
+	            'section',
 	            null,
 	            _react2.default.createElement(Header, null),
-	            _react2.default.createElement(_basedata.BaseData, { data: this.props.data.baseData }),
 	            _react2.default.createElement(
-	                'section',
-	                null,
+	                'div',
+	                { className: 'row' },
 	                _react2.default.createElement(
-	                    'h3',
-	                    null,
-	                    'Repositories: '
+	                    'div',
+	                    { className: 'nine columns' },
+	                    _react2.default.createElement(_basedata.BaseData, { data: this.props.data.baseData }),
+	                    _react2.default.createElement(
+	                        'section',
+	                        null,
+	                        _react2.default.createElement(
+	                            'h3',
+	                            null,
+	                            'Repositories: '
+	                        ),
+	                        _react2.default.createElement(_list.Pager, { data: this.props.data }),
+	                        _react2.default.createElement(_list.ListWrapper, { data: repo }),
+	                        _react2.default.createElement(_list.Pager, { data: this.props.data })
+	                    )
 	                ),
-	                _react2.default.createElement(_list.Pager, { data: this.props.data }),
-	                _react2.default.createElement(_list.ListWrapper, { data: repo }),
-	                _react2.default.createElement(_list.Pager, { data: this.props.data })
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'three columns' },
+	                    _react2.default.createElement(
+	                        'h3',
+	                        null,
+	                        'Tests results'
+	                    ),
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        'Tape: ',
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: '../_tape_test/results.txt', target: '_blank' },
+	                            'result'
+	                        ),
+	                        ' '
+	                    ),
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        'Nightwatch: ',
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: '../_nightwatch/results/report.html', target: '_blank' },
+	                            'result'
+	                        ),
+	                        ' '
+	                    ),
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        'Jest: ',
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: '../__tests__/results.txt', target: '_blank' },
+	                            'result'
+	                        ),
+	                        ' '
+	                    )
+	                )
 	            )
 	        );
 	    }
@@ -38891,7 +38946,7 @@
 	            if (this.props.data.request == 'done') {
 	                content = _react2.default.createElement(List, { data: this.props.data });
 	            } else {
-	                content = _react2.default.createElement('div', {}, this.props.data.request == 'fetch' ? 'Loading data...' : 'Network error. (' + this.props.data.error + ')');
+	                content = _react2.default.createElement('div', { className: 'ajax' }, this.props.data.request == 'fetch' ? 'Loading data...' : 'Network error. ' + this.props.data.error);
 	            }
 	        }
 	        return _react2.default.createElement(

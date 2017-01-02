@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "test": "jest"
+    "jest": "jest",
+    "test": "babel-tape-runner \"_tape_test/*.js\" | tap-spec ",
+    "tape-test": "babel-tape-runner \"_tape_test/*.js\""
   },
   "main": "app.js",
   "description": "git-test",
@@ -40,7 +42,16 @@
     "babel-preset-react": "^6.16.0",
     "jest": "^18.0.0",
     "jest-cli": "^18.0.0",
-    "react-test-renderer": "^15.4.1"
+    "react-test-renderer": "^15.4.1",
+    "nightwatch": "*",
+    "nightwatch-html-reporter": "~1.0.8",
+    "chromedriver": "*",
+    "tape":"~4.6.3",
+    "babel-tape-runner": "2.0.1",
+    "tap-spec":"4.1.1",
+    "tap-to-html": "1.1.1",
+    "isomorphic-fetch":"2.2.1",
+    "es6-promise":"4.0.5"
   },
   "jest": {
     "verbose": true
