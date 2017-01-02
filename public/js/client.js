@@ -38880,7 +38880,7 @@
 	                        'Tape: ',
 	                        _react2.default.createElement(
 	                            'a',
-	                            { href: '../_tape_test/results.txt', target: '_blank' },
+	                            { href: 'test-results/_tape_test/results.txt', target: '_blank' },
 	                            'result'
 	                        ),
 	                        ' '
@@ -38891,7 +38891,7 @@
 	                        'Nightwatch: ',
 	                        _react2.default.createElement(
 	                            'a',
-	                            { href: '../_nightwatch/results/report.html', target: '_blank' },
+	                            { href: 'test-results/_nightwatch/results/report.html', target: '_blank' },
 	                            'result'
 	                        ),
 	                        ' '
@@ -38902,7 +38902,7 @@
 	                        'Jest: ',
 	                        _react2.default.createElement(
 	                            'a',
-	                            { href: '../__tests__/results.txt', target: '_blank' },
+	                            { href: 'test-results/__tests__/results.txt', target: '_blank' },
 	                            'result'
 	                        ),
 	                        ' '

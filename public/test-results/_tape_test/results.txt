@@ -1,0 +1,27 @@
+
+> git-test@0.0.0 test C:\_WORK\git-test
+> babel-tape-runner "_tape_test/*.js" | tap-spec 
+
+
+  store init
+
+    √ should be equal
+
+  store set value
+
+    √ should be equal
+
+  get base data
+
+    √ should not be equal
+
+  get first page
+
+    √ should not be equal
+
+
+  total:     4
+  passing:   4
+  duration:  2.5s
+
+
